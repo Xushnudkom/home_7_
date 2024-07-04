@@ -12,7 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import order from "../../service/order";
 import { useEffect, useState } from "react";
-import { Button, IconButton, InputBase, Typography } from "@mui/material";
+import { IconButton, InputBase } from "@mui/material";
 import { GridSearchIcon } from "@mui/x-data-grid";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -42,7 +42,7 @@ const Index = () => {
   const getOrderes = async () => {
     try {
       const response = await order.get();
-      setOrderes(response.data.orderes);
+      setOrderes(response?.data?.orderes);
     } catch (err) {
       console.log(err);
     }
@@ -73,6 +73,7 @@ const Index = () => {
       prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
     );
   };
+  console.log(orderes);
 
   return (
     <>
@@ -113,26 +114,30 @@ const Index = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orderes.map((row, index) => (
-                <StyledTableRow key={row.id}>
-                  <StyledTableCell>{index + 1}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">
-                    {row.client_full_name}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.client_phone_number}
-                  </StyledTableCell>
-                  
-                  <StyledTableCell align="center">
-                    <button className="mr-2" onClick={() => editItem(row)}>
-                      <EditIcon color="warning" />
-                    </button>
-                    <button className="ml-2" onClick={() => deleteItem(row.id)}>
-                      <DeleteIcon color="error" />
-                    </button>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+              {orderes?.lenght ? (
+                orderes.map((row, index) => (
+                  <StyledTableRow key={row.id}>
+                    <StyledTableCell>{index + 1}</StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {row.client_full_name}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {row.client_phone_number}
+                    </StyledTableCell>
+                    
+                    <StyledTableCell align="center">
+                      <button className="mr-2" onClick={() => editItem(row)}>
+                        <EditIcon color="warning" />
+                      </button>
+                      <button className="ml-2" onClick={() => deleteItem(row.id)}>
+                        <DeleteIcon color="error" />
+                      </button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))
+              ): (
+                <div className="mt-4 text-xl">No data found</div>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
